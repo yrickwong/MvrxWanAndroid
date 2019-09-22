@@ -40,7 +40,7 @@ class TextLoadingView @JvmOverloads constructor(
                         18,
                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
                     )
-                    loadingView.text = spannableString
+                    this@TextLoadingView.text = spannableString
                 }
             }
         }

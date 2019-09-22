@@ -78,10 +78,6 @@ class MainFragment : BaseFragment() {
 
     override fun invalidate() {
         super.invalidate()
-        withState(bannerViewModel, articleViewModel) { bannerState, articleState ->
-            loadingView.isVisible =
-                bannerState.request is Loading || articleState.request is Loading
-        }
     }
 
     override fun epoxyController() =
