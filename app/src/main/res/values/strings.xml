@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">MvrxAndroid</string>
+
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_wechat">WeChat</string>
+    <string name="title_navigator">Navigator</string>
+    <string name="title_project">Projects</string>
+</resources>

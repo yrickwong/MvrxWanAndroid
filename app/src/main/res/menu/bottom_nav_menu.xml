@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--fixme: 若BottomNavigationView和Navigation setUp的话 这里的id一定要与navigation文件夹下的nav.xml下面的fragment id 对应上-->
+    <item
+            android:id="@+id/main_fragment"
+            android:icon="@drawable/ic_home_black_24dp"
+            android:title="@string/title_home" />
+
+    <item
+            android:id="@+id/dashboard_fragment"
+            android:icon="@drawable/ic_dashboard_black_24dp"
+            android:title="@string/title_dashboard" />
+
+    <item
+            android:id="@+id/wechat_fragment"
+            android:icon="@drawable/ic_wechat"
+            android:title="@string/title_wechat" />
+
+    <item
+            android:id="@+id/navigation_fragment"
+            android:icon="@drawable/ic_navigation_black_24dp"
+            android:title="@string/title_navigator" />
+
+    <item
+            android:id="@+id/projects_fragment"
+            android:icon="@drawable/ic_project_black_24dp"
+            android:title="@string/title_project" />
+</menu>
