@@ -1,9 +1,11 @@
 package com.yrickwong.tech.mvrx.views
 
 import android.content.Context
+import android.text.Html
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
+import androidx.core.view.isVisible
 import com.airbnb.epoxy.CallbackProp
 import com.airbnb.epoxy.ModelProp
 import com.airbnb.epoxy.ModelView
@@ -24,7 +26,17 @@ class ArticleRow @JvmOverloads constructor(
 
     @ModelProp
     fun setArticle(article: Article) {
-        title.text = article.title
+        topView.isVisible = (article.type == 1)
+        newView.isVisible = (article.fresh)
+        answerView.isVisible = (article.tags.isNotEmpty())
+        article.tags.isNotEmpty().let {
+            if (it) {
+                answerView.text = article.tags[0].name
+            }
+        }
+        author.text = article.author
+        title.text = Html.fromHtml(article.title)
+        time.text = article.niceDate
         chapterName.text = "${article.superChapterName}/${article.chapterName}"
     }
 
