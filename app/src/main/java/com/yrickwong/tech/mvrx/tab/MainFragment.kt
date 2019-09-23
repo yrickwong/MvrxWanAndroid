@@ -76,9 +76,6 @@ class MainFragment : BaseFragment() {
         }
     }
 
-    override fun invalidate() {
-        super.invalidate()
-    }
 
     override fun epoxyController() =
         simpleController(bannerViewModel, articleViewModel) { bannerState, articleState ->

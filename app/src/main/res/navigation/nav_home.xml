@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_home"
+    app:startDestination="@id/main_fragment"
+    tools:ignore="UnusedNavigation">
+
+    <fragment
+        android:id="@+id/main_fragment"
+        android:name="com.yrickwong.tech.mvrx.tab.MainFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_main">
+
+        <action
+            android:id="@+id/action_to_webview_fragment"
+            app:destination="@id/webview_fragment"
+            app:enterAnim="@anim/anim_enter"
+            app:exitAnim="@anim/anim_exit"
+            app:popEnterAnim="@anim/anim_pop_enter"
+            app:popExitAnim="@anim/anim_pop_exit" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/webview_fragment"
+        android:name="com.yrickwong.tech.mvrx.feature.webview.WebViewFragment"
+        android:label=""
+        tools:layout="@layout/fragment_webview" />
+</navigation>

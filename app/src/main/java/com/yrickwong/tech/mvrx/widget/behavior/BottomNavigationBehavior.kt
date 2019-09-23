@@ -29,6 +29,14 @@ class BottomNavigationBehavior(context: Context, attrs: AttributeSet) :
         return nestedScrollAxes == ViewCompat.SCROLL_AXIS_VERTICAL
     }
 
+    override fun onStopNestedScroll(
+        coordinatorLayout: CoordinatorLayout,
+        child: View,
+        target: View,
+        type: Int
+    ) {
+        super.onStopNestedScroll(coordinatorLayout, child, target, type)
+    }
     override fun onNestedPreScroll(
         coordinatorLayout: CoordinatorLayout,
         child: View,

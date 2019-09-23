@@ -21,8 +21,6 @@ data class WebViewDetailArgs(val url: String, val title: String) : Parcelable
 
 class WebViewFragment : BaseWebMvRxFragment() {
 
-    private lateinit var toolbar: Toolbar
-
     private val webViewArgs: WebViewDetailArgs by args()
 
     override fun onCreateView(
@@ -30,20 +28,11 @@ class WebViewFragment : BaseWebMvRxFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_webview, container, false).apply {
-            toolbar = findViewById(R.id.toolbar)
-            toolbar.setupWithNavController(findNavController())//设置返回
-        }
+        return inflater.inflate(R.layout.fragment_webview, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        tv_title.apply {
-            text = webViewArgs.title
-            postDelayed({
-                tv_title.isSelected = true
-            }, 150)
-        }
     }
 
     override fun getUrl(): String? = webViewArgs.url
