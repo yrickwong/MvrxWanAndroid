@@ -15,13 +15,9 @@ import com.yrickwong.tech.mvrx.bean.WXChapterBean
 class WeChatPagerAdapter(fm: FragmentManager?) :
     FragmentStatePagerAdapter(fm) {
 
-    private val fragments = mutableListOf<Fragment>()
+    val fragments = mutableListOf<Fragment>()
 
     private lateinit var list: List<WXChapterBean>
-
-    init {
-        fragments.clear()
-    }
 
     override fun getItem(position: Int): Fragment = fragments[position]
 
@@ -33,6 +29,7 @@ class WeChatPagerAdapter(fm: FragmentManager?) :
 
 
     fun setData(wxChapters: List<WXChapterBean>) {
+        fragments.clear()
         list = wxChapters
         list.forEach {
             fragments.add(KnowledgeFragment.getInstance(it.id))

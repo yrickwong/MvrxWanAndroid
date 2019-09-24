@@ -12,14 +12,12 @@ import com.airbnb.mvrx.*
 import com.yrickwong.tech.mvrx.R
 import com.yrickwong.tech.mvrx.bean.Article
 import com.yrickwong.tech.mvrx.bean.HttpResult
-import com.yrickwong.tech.mvrx.core.BaseFragment
+import com.yrickwong.tech.mvrx.core.BaseEpoxyFragment
 import com.yrickwong.tech.mvrx.core.MvRxEpoxyController
 import com.yrickwong.tech.mvrx.core.MvRxViewModel
 import com.yrickwong.tech.mvrx.core.simpleController
-import com.yrickwong.tech.mvrx.feature.banner.BannerState
 import com.yrickwong.tech.mvrx.feature.webview.WebViewDetailArgs
 import com.yrickwong.tech.mvrx.network.ApiService
-import com.yrickwong.tech.mvrx.tab.TAG
 import com.yrickwong.tech.mvrx.views.articleRow
 import com.yrickwong.tech.mvrx.views.loadingRow
 import kotlinx.android.parcel.Parcelize
@@ -97,7 +95,9 @@ class KnowledgeViewModel(state: KnowledgeState, private val apiService: ApiServi
     }
 }
 
-class KnowledgeFragment : BaseFragment() {
+private const val TAG = "KnowledgeFragment"
+
+class KnowledgeFragment : BaseEpoxyFragment() {
 
     private lateinit var recyclerView: EpoxyRecyclerView
 
@@ -139,6 +139,11 @@ class KnowledgeFragment : BaseFragment() {
         swipeRefreshLayout.setOnRefreshListener(knowledgeViewModel::fetchKnowLedge)
     }
 
+
+    override fun onDestroyView() {
+        Log.d(TAG, "onDestroyView: ")
+        super.onDestroyView()
+    }
     override fun epoxyController(): MvRxEpoxyController =
         simpleController(knowledgeViewModel) { knowledgeState ->
             knowledgeState.articles.forEach { art ->

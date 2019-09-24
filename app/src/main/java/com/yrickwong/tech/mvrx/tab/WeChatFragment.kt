@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import com.airbnb.mvrx.*
 import com.google.android.material.tabs.TabLayout
 import com.yrickwong.tech.mvrx.R
-import com.yrickwong.tech.mvrx.core.BaseFragment
 import com.yrickwong.tech.mvrx.feature.wechat.WeChatPagerAdapter
 import com.yrickwong.tech.mvrx.feature.wechat.WeChatViewModel
 import kotlinx.android.synthetic.main.fragment_wechat.*
@@ -24,6 +23,7 @@ class WeChatFragment : BaseMvRxFragment() {
     private val viewPagerAdapter: WeChatPagerAdapter by lazy {
         WeChatPagerAdapter(childFragmentManager)
     }
+
 
     private val wechatViewModel: WeChatViewModel by fragmentViewModel()//定义成Activity说明可以再fragment中间进行数据传递复用
 
@@ -60,31 +60,23 @@ class WeChatFragment : BaseMvRxFragment() {
 
             })
         }
-
-    }
-
-    override fun invalidate() {
         withState(wechatViewModel) { state ->
-            when {
-                state.request is Loading -> {
-                    Log.w(TAG, "wechatChapter request Loading")
-                }
-                state.request is Success -> {
-                    Log.w(TAG, "wechatChapter request Success")
+            when (state.request) {
+                is Loading -> { }
+                is Success -> {
                     viewPager.run {
                         viewPagerAdapter.setData(state.wxChapters)
                         adapter = viewPagerAdapter
                         offscreenPageLimit = state.wxChapters.size
                     }
                 }
-                state.request is Fail -> {
-                    Log.w(TAG, "wechatChapter request failed", state.request.error)
-                }
-                else -> {
-
-                }
+                is Fail -> { }
             }
         }
+    }
+
+    override fun invalidate() {
+
     }
 
 }

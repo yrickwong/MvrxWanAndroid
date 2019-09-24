@@ -2,13 +2,16 @@ package com.yrickwong.tech.mvrx.core
 
 import android.os.Bundle
 import android.os.Parcelable
+import android.util.Log
 import androidx.annotation.IdRes
 import androidx.navigation.fragment.findNavController
 import com.airbnb.mvrx.BaseMvRxFragment
 import com.airbnb.mvrx.MvRx
 
 //Mvrx + Epoxy
-abstract class BaseFragment : BaseMvRxFragment() {
+private const val TAG = "BaseEpoxyFragment"
+
+abstract class BaseEpoxyFragment : BaseMvRxFragment() {
 
     protected val epoxyController by lazy { epoxyController() }
 
@@ -18,6 +21,7 @@ abstract class BaseFragment : BaseMvRxFragment() {
     }
 
     override fun invalidate() {
+        Log.d(TAG, "invalidate: ")
         epoxyController.requestModelBuild()
     }
 
@@ -37,6 +41,7 @@ abstract class BaseFragment : BaseMvRxFragment() {
     }
 
     override fun onDestroyView() {
+
         epoxyController.cancelPendingModelBuild()
         super.onDestroyView()
     }
@@ -45,7 +50,7 @@ abstract class BaseFragment : BaseMvRxFragment() {
         /**
          * If we put a parcelable arg in [MvRx.KEY_ARG] then MvRx will attempt to call a secondary
          * constructor on any MvRxState objects and pass in this arg directly.
-         * @see [com.airbnb.mvrx.sample.features.dadjoke.DadJokeDetailState]
+         * @see [com.yrickwong.tech.mvrx.feature.wechat.KnowledgeArgs]
          */
         val bundle = arg?.let { Bundle().apply { putParcelable(MvRx.KEY_ARG, it) } }
         findNavController().navigate(actionId, bundle)

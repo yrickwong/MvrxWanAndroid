@@ -7,7 +7,7 @@ import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.withState
 
 /**
- * For use with [BaseFragment.epoxyController].
+ * For use with [BaseEpoxyFragment.epoxyController].
  *
  * This builds Epoxy models in a background thread.
  */
@@ -23,7 +23,7 @@ open class MvRxEpoxyController(
 /**
  * Create a [MvRxEpoxyController] that builds models with the given callback.
  */
-fun BaseFragment.simpleController(
+fun BaseEpoxyFragment.simpleController(
     buildModels: EpoxyController.() -> Unit
 ) = MvRxEpoxyController {
     // Models are built asynchronously, so it is possible that this is called after the fragment
@@ -36,7 +36,7 @@ fun BaseFragment.simpleController(
  * Create a [MvRxEpoxyController] that builds models with the given callback.
  * When models are built the current state of the viewmodel will be provided.
  */
-fun <S : MvRxState, A : MvRxViewModel<S>> BaseFragment.simpleController(
+fun <S : MvRxState, A : MvRxViewModel<S>> BaseEpoxyFragment.simpleController(
     viewModel: A,
     buildModels: EpoxyController.(state: S) -> Unit
 ) = MvRxEpoxyController {
@@ -50,7 +50,7 @@ fun <S : MvRxState, A : MvRxViewModel<S>> BaseFragment.simpleController(
  * Create a [MvRxEpoxyController] that builds models with the given callback.
  * When models are built the current state of the viewmodels will be provided.
  */
-fun <A : BaseMvRxViewModel<B>, B : MvRxState, C : BaseMvRxViewModel<D>, D : MvRxState> BaseFragment.simpleController(
+fun <A : BaseMvRxViewModel<B>, B : MvRxState, C : BaseMvRxViewModel<D>, D : MvRxState> BaseEpoxyFragment.simpleController(
     viewModel1: A,
     viewModel2: C,
     buildModels: EpoxyController.(state1: B, state2: D) -> Unit
@@ -65,7 +65,7 @@ fun <A : BaseMvRxViewModel<B>, B : MvRxState, C : BaseMvRxViewModel<D>, D : MvRx
  * Create a [MvRxEpoxyController] that builds models with the given callback.
  * When models are built the current state of the viewmodels will be provided.
  */
-fun <A : BaseMvRxViewModel<B>, B : MvRxState, C : BaseMvRxViewModel<D>, D : MvRxState, E : BaseMvRxViewModel<F>, F : MvRxState> BaseFragment.simpleController(
+fun <A : BaseMvRxViewModel<B>, B : MvRxState, C : BaseMvRxViewModel<D>, D : MvRxState, E : BaseMvRxViewModel<F>, F : MvRxState> BaseEpoxyFragment.simpleController(
     viewModel1: A,
     viewModel2: C,
     viewModel3: E,

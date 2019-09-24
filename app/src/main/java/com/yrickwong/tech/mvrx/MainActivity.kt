@@ -1,19 +1,15 @@
 package com.yrickwong.tech.mvrx
 
 import android.animation.ObjectAnimator
-import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
 import android.view.View.*
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.airbnb.mvrx.BaseMvRxActivity
 import com.airbnb.mvrx.MvRx
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.yrickwong.tech.mvrx.feature.webview.WebViewDetailArgs
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar.*
@@ -34,7 +30,12 @@ class MainActivity : BaseMvRxActivity() {
         if (savedInstanceState == null) {
             setupBottomNavigationBar()
         }
-        currentNavController?.value?.addOnDestinationChangedListener { _, destination, arguments ->
+        currentNavController?.value?.setDestinationChangedListener()
+    }
+
+
+    private fun NavController.setDestinationChangedListener() {
+        this.addOnDestinationChangedListener { _, destination, arguments ->
             val args = arguments?.get(MvRx.KEY_ARG)
             when {
                 args is WebViewDetailArgs -> tv_title.apply {
@@ -80,6 +81,7 @@ class MainActivity : BaseMvRxActivity() {
         // Whenever the selected controller changes, setup the action bar.
         controller.observe(this, Observer { navController ->
             Log.d(TAG, "setupBottomNavigationBar: $navController")
+            navController.setDestinationChangedListener()
             toolbar.setupWithNavController(navController)
         })
         currentNavController = controller

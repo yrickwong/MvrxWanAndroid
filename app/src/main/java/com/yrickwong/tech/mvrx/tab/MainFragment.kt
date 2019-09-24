@@ -7,13 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyRecyclerView
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.activityViewModel
-import com.airbnb.mvrx.withState
 import com.yrickwong.tech.mvrx.R
-import com.yrickwong.tech.mvrx.core.BaseFragment
+import com.yrickwong.tech.mvrx.core.BaseEpoxyFragment
 import com.yrickwong.tech.mvrx.core.simpleController
 import com.yrickwong.tech.mvrx.feature.article.ArticleState
 import com.yrickwong.tech.mvrx.feature.article.ArticleViewModel
@@ -29,7 +27,7 @@ import kotlinx.android.synthetic.main.fragment_main.*
 
 private const val TAG = "MainFragment"
 
-class MainFragment : BaseFragment() {
+class MainFragment : BaseEpoxyFragment() {
 
     private lateinit var recyclerView: EpoxyRecyclerView
 
@@ -52,8 +50,10 @@ class MainFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d(TAG, "onViewCreated: ")
         bannerViewModel.asyncSubscribe(BannerState::request,
             onSuccess = {
+                Log.w(TAG, "banner request onSuccess")
                 swipeRefreshLayout.isRefreshing = false
             },
             onFail = { error ->
@@ -63,6 +63,7 @@ class MainFragment : BaseFragment() {
         )
         articleViewModel.asyncSubscribe(ArticleState::request,
             onSuccess = {
+                Log.w(TAG, "article request onSuccess")
                 swipeRefreshLayout.isRefreshing = false
             },
             onFail = { error ->
@@ -74,12 +75,13 @@ class MainFragment : BaseFragment() {
             bannerViewModel.fetchBanner()
             articleViewModel.fetchArticle()
         }
+
+        val foo=Loading<String>()
+        println(foo())
     }
 
 
-    override fun epoxyController() =
-        simpleController(bannerViewModel, articleViewModel) { bannerState, articleState ->
-
+    override fun epoxyController() = simpleController(bannerViewModel, articleViewModel) { bannerState, articleState ->
             carouselPageSnap {
                 id("carousel")
                 models(mutableListOf<BannerRowModel_>().apply {

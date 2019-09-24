@@ -11,8 +11,7 @@ import org.koin.android.ext.android.inject
 data class WeChatState(
     val wxChapters: List<WXChapterBean> = emptyList(),
     val request: Async<HttpResult<List<WXChapterBean>>> = Uninitialized
-) :
-    MvRxState
+) : MvRxState
 
 class WeChatViewModel(
     state: WeChatState,
@@ -23,7 +22,6 @@ class WeChatViewModel(
     }
 
     private fun fetchWxChapter() {
-
         withState { state ->
             if (state.request is Loading) return@withState //避免重复请求
 
