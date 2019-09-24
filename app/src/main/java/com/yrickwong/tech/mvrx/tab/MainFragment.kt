@@ -27,7 +27,7 @@ import com.yrickwong.tech.mvrx.views.loadingRow
 import kotlinx.android.synthetic.main.fragment_main.*
 
 
-const val TAG = "MainFragment"
+private const val TAG = "MainFragment"
 
 class MainFragment : BaseFragment() {
 

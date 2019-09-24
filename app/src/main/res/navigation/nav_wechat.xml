@@ -8,9 +8,21 @@
 
     <fragment
         android:id="@+id/wechat_fragment"
-        android:name="com.yrickwong.tech.mvrx.tab.WechatFragment"
+        android:name="com.yrickwong.tech.mvrx.tab.WeChatFragment"
         android:label="@string/title_wechat"
-        tools:layout="@layout/fragment_wechat" />
+        tools:layout="@layout/fragment_wechat">
+        <action
+            android:id="@+id/action_to_webview_fragment"
+            app:destination="@id/webview_fragment"
+            app:enterAnim="@anim/anim_enter"
+            app:exitAnim="@anim/anim_exit"
+            app:popEnterAnim="@anim/anim_pop_enter"
+            app:popExitAnim="@anim/anim_pop_exit" />
+    </fragment>
 
-
+    <fragment
+        android:id="@+id/webview_fragment"
+        android:name="com.yrickwong.tech.mvrx.feature.webview.WebViewFragment"
+        android:label=""
+        tools:layout="@layout/fragment_webview" />
 </navigation>

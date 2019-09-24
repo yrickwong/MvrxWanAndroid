@@ -32,8 +32,7 @@ class ArticleViewModel(state: ArticleState, private val apiService: ApiService) 
         withState { state ->
             if (state.request is Loading) return@withState //避免重复请求
             val top: Observable<HttpResult<List<Article>>> = apiService.fetchTopArticles()
-            val page: Observable<HttpResult<ArticleList>> =
-                apiService.getArticles(FIRST_PAGE)
+            val page: Observable<HttpResult<ArticleList>> = apiService.getArticles(FIRST_PAGE)
             Observable.zip(top, page,
                 BiFunction<HttpResult<List<Article>>, HttpResult<ArticleList>, HttpResult<List<Article>>> { t1, t2 ->
                     convert(t1, t2)

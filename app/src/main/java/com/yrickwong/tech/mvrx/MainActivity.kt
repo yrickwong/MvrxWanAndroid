@@ -4,8 +4,7 @@ import android.animation.ObjectAnimator
 import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
-import android.view.View.GONE
-import android.view.View.VISIBLE
+import android.view.View.*
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
@@ -39,8 +38,11 @@ class MainActivity : BaseMvRxActivity() {
             val args = arguments?.get(MvRx.KEY_ARG)
             when {
                 args is WebViewDetailArgs -> tv_title.apply {
-                    tv_title.visibility = VISIBLE
+                    visibility = VISIBLE
                     text = args.title
+                    postDelayed({
+                        isSelected = true
+                    }, 1000)
                 }
                 else -> tv_title.visibility = GONE
             }
@@ -77,7 +79,7 @@ class MainActivity : BaseMvRxActivity() {
 
         // Whenever the selected controller changes, setup the action bar.
         controller.observe(this, Observer { navController ->
-            Log.d(TAG, "setupBottomNavigationBar: ")
+            Log.d(TAG, "setupBottomNavigationBar: $navController")
             toolbar.setupWithNavController(navController)
         })
         currentNavController = controller

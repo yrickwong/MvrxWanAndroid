@@ -1,12 +1,10 @@
 package com.yrickwong.tech.mvrx.network
 
-import com.yrickwong.tech.mvrx.bean.Article
-import com.yrickwong.tech.mvrx.bean.ArticleList
-import com.yrickwong.tech.mvrx.bean.Banner
-import com.yrickwong.tech.mvrx.bean.HttpResult
+import com.yrickwong.tech.mvrx.bean.*
 import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ApiService {
 
@@ -25,4 +23,22 @@ interface ApiService {
      */
     @GET("article/list/{pageNum}/json")
     fun getArticles(@Path("pageNum") pageNum: Int): Observable<HttpResult<ArticleList>>
+
+    /**
+     * 获取公众号列表
+     * http://wanandroid.com/wxarticle/chapters/json
+     */
+    @GET("/wxarticle/chapters/json")
+    fun fetchWXChapters(): Observable<HttpResult<List<WXChapterBean>>>
+
+
+    /**
+     * 知识体系下的文章
+     * http://www.wanandroid.com/article/list/0/json?cid=168
+     * @param page
+     * @param cid
+     */
+    @GET("article/list/{page}/json")
+    fun fetchKnowledgeList(@Path("page") page: Int, @Query("cid") cid: Int): Observable<HttpResult<ArticleList>>
+
 }

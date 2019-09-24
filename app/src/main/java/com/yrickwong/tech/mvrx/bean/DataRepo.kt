@@ -46,7 +46,7 @@ data class Article(
     @Json(name = "publishTime") val publishTime: Long,
     @Json(name = "superChapterId") val superChapterId: Int,
     @Json(name = "superChapterName") val superChapterName: String,
-    @Json(name = "tags") val tags: MutableList<Tag>,
+    @Json(name = "tags") val tags: List<Tag>,
     @Json(name = "title") val title: String,
     @Json(name = "type") val type: Int,
     @Json(name = "userId") val userId: Int,
@@ -71,4 +71,17 @@ data class ArticleList(
 data class Tag(
     @Json(name = "name") val name: String,
     @Json(name = "url") val url: String
+)
+
+// 公众号列表实体
+@JsonClass(generateAdapter = true) //防止反射
+data class WXChapterBean(
+    @Json(name = "children") val children: List<String>,
+    @Json(name = "courseId") val courseId: Int,
+    @Json(name = "id") val id: Int,
+    @Json(name = "name") val name: String,
+    @Json(name = "order") val order: Int,
+    @Json(name = "parentChapterId") val parentChapterId: Int,
+    @Json(name = "userControlSetTop") val userControlSetTop: Boolean,
+    @Json(name = "visible") val visible: Int
 )
