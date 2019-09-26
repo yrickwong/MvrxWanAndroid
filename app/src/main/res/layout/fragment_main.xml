@@ -16,6 +16,7 @@
             android:layout_height="0dp"
             android:layout_alignParentTop="true"
             android:orientation="vertical"
+            android:clipToPadding="false"
             app:layoutManager="LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

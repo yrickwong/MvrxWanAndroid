@@ -76,12 +76,13 @@ class MainFragment : BaseEpoxyFragment() {
             articleViewModel.fetchArticle()
         }
 
-        val foo=Loading<String>()
+        val foo = Loading<String>()
         println(foo())
     }
 
 
-    override fun epoxyController() = simpleController(bannerViewModel, articleViewModel) { bannerState, articleState ->
+    override fun epoxyController() =
+        simpleController(bannerViewModel, articleViewModel) { bannerState, articleState ->
             carouselPageSnap {
                 id("carousel")
                 models(mutableListOf<BannerRowModel_>().apply {
@@ -118,7 +119,11 @@ class MainFragment : BaseEpoxyFragment() {
                 // Changing the ID will force it to rebind when new data is loaded even if it is
                 // still on screen which will ensure that we trigger loading again.
                 id("loading${articleState.page}")
-                onBind { _, _, _ -> articleViewModel.fetchNextPage() }
+                onBind { _, _, _ ->
+                    if (articleState.page > 0) {
+                        articleViewModel.fetchNextPage()
+                    }
+                }
             }
         }
 }

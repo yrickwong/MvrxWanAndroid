@@ -42,19 +42,18 @@ data class KnowledgeState(
     constructor(args: KnowledgeArgs) : this(id = args.id)
 }
 
-private const val FIRST_PAGE = 0
 
 class KnowledgeViewModel(state: KnowledgeState, private val apiService: ApiService) :
     MvRxViewModel<KnowledgeState>(state) {
     init {
-        fetchKnowLedge()
+        fetchNextPage()
     }
 
-    fun fetchKnowLedge() {
+    fun refreshKnowledge() {
         withState { state ->
             if (state.request is Loading) return@withState //避免重复请求
 
-            apiService.fetchKnowledgeList(FIRST_PAGE, cid = state.id)
+            apiService.fetchKnowledgeList(0, cid = state.id)
                 .map { HttpResult(it.data.datas) }
                 .execute {
                     copy(
@@ -129,6 +128,7 @@ class KnowledgeFragment : BaseEpoxyFragment() {
         knowledgeViewModel.asyncSubscribe(
             KnowledgeState::request,
             onSuccess = {
+                Log.w(TAG, "knowledge request onSuccess")
                 swipeRefreshLayout.isRefreshing = false
             },
             onFail = { error ->
@@ -136,14 +136,10 @@ class KnowledgeFragment : BaseEpoxyFragment() {
                 Log.w(TAG, "knowledge request failed", error)
             }
         )
-        swipeRefreshLayout.setOnRefreshListener(knowledgeViewModel::fetchKnowLedge)
+        swipeRefreshLayout.setOnRefreshListener(knowledgeViewModel::refreshKnowledge)
     }
 
 
-    override fun onDestroyView() {
-        Log.d(TAG, "onDestroyView: ")
-        super.onDestroyView()
-    }
     override fun epoxyController(): MvRxEpoxyController =
         simpleController(knowledgeViewModel) { knowledgeState ->
             knowledgeState.articles.forEach { art ->
@@ -163,7 +159,9 @@ class KnowledgeFragment : BaseEpoxyFragment() {
                 // Changing the ID will force it to rebind when new data is loaded even if it is
                 // still on screen which will ensure that we trigger loading again.
                 id("loading${knowledgeState.page}")
-                onBind { _, _, _ -> knowledgeViewModel.fetchNextPage() }
+                onBind { _, _, _ ->
+                    knowledgeViewModel.fetchNextPage()
+                }
             }
         }
 }
