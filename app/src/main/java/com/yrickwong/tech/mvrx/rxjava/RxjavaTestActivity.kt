@@ -22,7 +22,7 @@ class RxjavaTestActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_rxjava)
-        val rxService = RxService(apiSevice).also {
+        RxService(apiSevice).also {
             it.fetchBanner()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -38,6 +38,7 @@ class RxjavaTestActivity : AppCompatActivity() {
                     }
 
                     override fun onError(e: Throwable) {
+
                     }
 
                 })

@@ -1,6 +1,7 @@
 package com.yrickwong.tech.mvrx.views
 
 import android.content.Context
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.SnapHelper
@@ -15,14 +16,10 @@ class CarouselPageSnap(context: Context) : Carousel(context) {
         setDefaultItemSpacingDp(0)
     }
 
-    override fun getSnapHelperFactory(): SnapHelperFactory {
-        return CarouselPageSnap
-    }
+    override fun getSnapHelperFactory(): SnapHelperFactory = CarouselPageSnap
 
     companion object : SnapHelperFactory() {
-        override fun buildSnapHelper(context: Context?): SnapHelper {
-            return PagerSnapHelper()
-        }
+        override fun buildSnapHelper(context: Context?): SnapHelper = BannerPageSnapHelper()
     }
 
 }

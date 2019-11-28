@@ -102,6 +102,7 @@ class KnowledgeFragment : BaseEpoxyFragment() {
 
     private val knowledgeViewModel: KnowledgeViewModel by fragmentViewModel()
 
+
     companion object {
         fun getInstance(cid: Int): KnowledgeFragment {
             val fragment = KnowledgeFragment()

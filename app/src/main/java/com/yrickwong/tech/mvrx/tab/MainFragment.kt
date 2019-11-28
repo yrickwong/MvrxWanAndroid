@@ -75,9 +75,6 @@ class MainFragment : BaseEpoxyFragment() {
             bannerViewModel.fetchBanner()
             articleViewModel.fetchArticle()
         }
-
-        val foo = Loading<String>()
-        println(foo())
     }
 
 
