@@ -39,22 +39,22 @@ class MainFragment : BaseEpoxyFragment() {
     }
 
     override fun epoxyController() = simpleController(pictureViewModel) { pictureState ->
-        pictureState.pictures.forEach { art ->
+        pictureState.pictures.forEach { pic ->
             pictureSquare {
-                id(1)
-                picture(art)
+                id(pic.title.hashCode())
+                picture(pic)
             }
         }
 
-//        loadingRow {
-//            // Changing the ID will force it to rebind when new data is loaded even if it is
-//            // still on screen which will ensure that we trigger loading again.
-//            id("loading${pictureState.page}")
-//            onBind { _, _, _ ->
-//                if (pictureState.page > 0) {
-//                    pictureViewModel.fetchNextPage()
-//                }
-//            }
-//        }
+        loadingRow {
+            // Changing the ID will force it to rebind when new data is loaded even if it is
+            // still on screen which will ensure that we trigger loading again.
+            id("loading${pictureState.page}")
+            onBind { _, _, _ ->
+                if (pictureState.page > 0) {
+                    pictureViewModel.fetchNextPage()
+                }
+            }
+        }
     }
 }
