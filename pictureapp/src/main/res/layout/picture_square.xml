@@ -14,10 +14,11 @@
         tools:background="#ff777777" />
 
     <TextView
+        android:gravity="center"
         android:id="@+id/title"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center"
+        android:layout_gravity="bottom"
         android:padding="10dp"
         android:textAllCaps="false"
         android:textColor="@android:color/white"

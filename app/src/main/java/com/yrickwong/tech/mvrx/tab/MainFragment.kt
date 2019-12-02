@@ -75,6 +75,7 @@ class MainFragment : BaseEpoxyFragment() {
             bannerViewModel.fetchBanner()
             articleViewModel.fetchArticle()
         }
+
     }
 
 

@@ -6,18 +6,11 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/sv_place"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp" />
 
     <com.airbnb.epoxy.EpoxyRecyclerView
         android:id="@+id/recycleView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:orientation="vertical"
-        app:layoutManager="LinearLayoutManager" />
+        android:clipToPadding="false" />
 
 </LinearLayout>

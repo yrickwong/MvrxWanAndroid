@@ -10,7 +10,8 @@ import org.koin.android.ext.android.inject
 
 private const val FIRST_PAGE = 0
 
-private const val TAG = "PictureViewModel"
+private const val TAG = "wangyi"
+
 data class PictureState(
     val page: Int = FIRST_PAGE,
     val place: String = "",
@@ -21,9 +22,6 @@ data class PictureState(
 class PictureViewModel(pictureState: PictureState, private val apiService: ApiService) :
     MvRxViewModel<PictureState>(pictureState) {
 
-    init {
-        fetchData("北京")
-    }
 
     /**
      *
@@ -49,6 +47,7 @@ class PictureViewModel(pictureState: PictureState, private val apiService: ApiSe
     }
 
     fun fetchNextPage() {
+        Log.d(TAG, "fetchNextPage: ")
         withState { state ->
             if (state.request is Loading) return@withState //避免重复请求
 

@@ -54,6 +54,11 @@ dependencies {
     implementation("com.airbnb.android:epoxy:$epoxyVersion") {
         exclude group: 'com.android.support'
     }
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.navigation:navigation-fragment:2.1.0'
+    implementation 'androidx.navigation:navigation-ui:2.1.0'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.1.0'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.1.0'
     kapt "com.airbnb.android:epoxy-processor:$epoxyVersion"
 
 
