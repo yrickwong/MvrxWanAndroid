@@ -22,7 +22,9 @@ data class PictureState(
 class PictureViewModel(pictureState: PictureState, private val apiService: ApiService) :
     MvRxViewModel<PictureState>(pictureState) {
 
-
+    init {
+        fetchData("上海")
+    }
     /**
      *
      * @param place String  传递进来的数据不可能为null,该判断的在外面都判断了
@@ -40,7 +42,7 @@ class PictureViewModel(pictureState: PictureState, private val apiService: ApiSe
                         request = it,
                         page = state.page + 1,
                         place = place,
-                        pictures = (it()?.list ?: emptyList())
+                        pictures = (it()?.data ?: emptyList())
                     )
                 }
         }
@@ -58,7 +60,7 @@ class PictureViewModel(pictureState: PictureState, private val apiService: ApiSe
                         request = it,
                         place = state.place,
                         page = state.page + 1,
-                        pictures = pictures + (it()?.list ?: emptyList())
+                        pictures = pictures + (it()?.data ?: emptyList())
                     )
                 }
         }

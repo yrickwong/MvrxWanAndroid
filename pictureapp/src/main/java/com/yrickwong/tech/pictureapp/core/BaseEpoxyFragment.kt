@@ -5,7 +5,7 @@ import android.util.Log
 import com.airbnb.mvrx.BaseMvRxFragment
 
 //Mvrx + Epoxy
-private const val TAG = "BaseEpoxyFragment"
+private const val TAG = "wangyi"
 
 abstract class BaseEpoxyFragment : BaseMvRxFragment() {
 

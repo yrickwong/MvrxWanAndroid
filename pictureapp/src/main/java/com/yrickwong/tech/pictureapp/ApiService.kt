@@ -14,7 +14,7 @@ interface ApiService {
     fun search(
         @Query("q") query: String,
         @Query("sn") page: Int,
-        @Query("pn") limit: Int = 10
+        @Query("pn") limit: Int = 2
     ): Single<HttpResult<List<Picture>>>
 
 }

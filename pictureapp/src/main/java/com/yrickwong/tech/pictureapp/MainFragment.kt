@@ -1,6 +1,7 @@
 package com.yrickwong.tech.pictureapp
 
 import android.content.Context
+import android.content.res.Resources
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -8,6 +9,7 @@ import android.view.*
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.airbnb.epoxy.EpoxyItemSpacingDecorator
 import com.airbnb.epoxy.EpoxyRecyclerView
 import com.airbnb.mvrx.*
 import com.yrickwong.tech.pictureapp.core.BaseEpoxyFragment
@@ -18,7 +20,7 @@ import com.yrickwong.tech.pictureapp.views.loadingRow
 import com.yrickwong.tech.pictureapp.views.pictureSquare
 
 
-private const val SPAN_COUNT = 2
+private const val SPAN_COUNT = 3
 private const val TAG = "wangyi"
 
 enum class LayoutManagerType {
@@ -106,14 +108,32 @@ class MainFragment : BaseEpoxyFragment() {
             when (styleState.layoutManagerType) {
                 LayoutManagerType.GRID_STYLE -> {
                     Log.d(TAG, "invalidate: GRID_STYLE")
-                    val gridLayoutManager = GridLayoutManager(requireContext(), SPAN_COUNT)
+                    val gridLayoutManager = GridLayoutManager(
+                        requireContext(),
+                        SPAN_COUNT
+                    )
                     epoxyController.spanCount = SPAN_COUNT
                     gridLayoutManager.spanSizeLookup = epoxyController.spanSizeLookup
+                    recyclerView.apply {
+                        if (itemDecorationCount == 0) {
+                            addItemDecoration(
+                                EpoxyItemSpacingDecorator(8.dp)
+                            )
+                        }
+                        layoutManager = gridLayoutManager
+                    }
                 }
                 LayoutManagerType.LIST_STYLE -> {
                     Log.d(TAG, "invalidate: LIST_STYLE")
                     val linearLayoutManager = LinearLayoutManager(requireContext())
-                    recyclerView.layoutManager = linearLayoutManager
+                    recyclerView.apply {
+                        if (itemDecorationCount == 0) {
+                            addItemDecoration(
+                                EpoxyItemSpacingDecorator(8.dp)
+                            )
+                        }
+                        layoutManager = linearLayoutManager
+                    }
                 }
             }
         }
@@ -122,7 +142,7 @@ class MainFragment : BaseEpoxyFragment() {
     override fun epoxyController() = simpleController(pictureViewModel) { pictureState ->
         pictureState.pictures.forEach { pic ->
             pictureSquare {
-                id(pic.title.hashCode())
+                id(pic.id.hashCode())
                 picture(pic)
             }
         }
@@ -130,7 +150,7 @@ class MainFragment : BaseEpoxyFragment() {
         loadingRow {
             // Changing the ID will force it to rebind when new data is loaded even if it is
             // still on screen which will ensure that we trigger loading again.
-            id("loading")
+            id("loading${pictureState.page}")
             onBind { _, _, _ ->
                 if (pictureState.page > 0) {
                     pictureViewModel.fetchNextPage()
@@ -141,3 +161,29 @@ class MainFragment : BaseEpoxyFragment() {
 }
 
 fun Context.showToast(text: CharSequence) = Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
+
+val Float.dp: Float                 // [xxhdpi](360 -> 1080)
+    get() = android.util.TypedValue.applyDimension(
+        android.util.TypedValue.COMPLEX_UNIT_DIP, this, Resources.getSystem().displayMetrics
+    )
+
+val Int.dp: Int
+    get() = android.util.TypedValue.applyDimension(
+        android.util.TypedValue.COMPLEX_UNIT_DIP,
+        this.toFloat(),
+        Resources.getSystem().displayMetrics
+    ).toInt()
+
+
+val Float.sp: Float                 // [xxhdpi](360 -> 1080)
+    get() = android.util.TypedValue.applyDimension(
+        android.util.TypedValue.COMPLEX_UNIT_SP, this, Resources.getSystem().displayMetrics
+    )
+
+
+val Int.sp: Int
+    get() = android.util.TypedValue.applyDimension(
+        android.util.TypedValue.COMPLEX_UNIT_SP,
+        this.toFloat(),
+        Resources.getSystem().displayMetrics
+    ).toInt()

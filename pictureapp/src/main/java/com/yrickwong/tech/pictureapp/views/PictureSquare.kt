@@ -12,7 +12,7 @@ import com.yrickwong.tech.pictureapp.bean.Picture
 import com.yrickwong.tech.pictureapp.R
 import kotlinx.android.synthetic.main.picture_square.view.*
 
-@ModelView(autoLayout = ModelView.Size.MATCH_WIDTH_WRAP_HEIGHT)
+@ModelView(autoLayout = ModelView.Size.MATCH_WIDTH_WRAP_HEIGHT, fullSpan = false)
 class PictureSquare @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
