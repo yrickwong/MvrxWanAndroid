@@ -17,7 +17,7 @@ abstract class BaseEpoxyFragment : BaseMvRxFragment() {
     }
 
     override fun invalidate() {
-        Log.d(TAG, "invalidate: ")
+        Log.d(TAG, "invalidate: BaseEpoxyFragment")
         epoxyController.requestModelBuild()
     }
 

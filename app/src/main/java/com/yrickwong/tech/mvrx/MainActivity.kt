@@ -36,9 +36,8 @@ class MainActivity : BaseMvRxActivity() {
 
     private fun NavController.setDestinationChangedListener() {
         this.addOnDestinationChangedListener { _, destination, arguments ->
-            val args = arguments?.get(MvRx.KEY_ARG)
-            when {
-                args is WebViewDetailArgs -> tv_title.apply {
+            when (val args = arguments?.get(MvRx.KEY_ARG)) {
+                is WebViewDetailArgs -> tv_title.apply {
                     visibility = VISIBLE
                     text = args.title
                     postDelayed({

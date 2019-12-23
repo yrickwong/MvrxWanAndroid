@@ -1,4 +1,4 @@
-package com.yrickwong.tech.pictureapp.views
+package com.yrickwong.tech.pictureapp.widgets
 
 import android.content.Context
 import android.util.AttributeSet
@@ -7,6 +7,7 @@ import android.widget.FrameLayout
 import com.airbnb.epoxy.CallbackProp
 import com.airbnb.epoxy.ModelProp
 import com.airbnb.epoxy.ModelView
+import com.bumptech.glide.Glide
 import com.squareup.picasso.Picasso
 import com.yrickwong.tech.pictureapp.bean.Picture
 import com.yrickwong.tech.pictureapp.R
@@ -25,9 +26,7 @@ class PictureSquare @JvmOverloads constructor(
 
     @ModelProp
     fun setPicture(picture: Picture) {
-        Picasso.with(context)
-            .load(picture.thumb)
-            .into(thumb)
+        Glide.with(context).load(picture.thumb).into(thumb)
         title.text = picture.title
     }
 

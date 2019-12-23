@@ -4,9 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#1D2C69"
-    android:foreground="?android:attr/selectableItemBackground"
-    app:cardCornerRadius="8dp">
+    >
 
     <FrameLayout
         android:layout_width="match_parent"

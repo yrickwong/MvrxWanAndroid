@@ -1,6 +1,7 @@
 package com.yrickwong.tech.pictureapp.feature
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import com.airbnb.mvrx.*
 import com.yrickwong.tech.pictureapp.ApiService
 import com.yrickwong.tech.pictureapp.bean.HttpResult
@@ -25,15 +26,14 @@ class PictureViewModel(pictureState: PictureState, private val apiService: ApiSe
     init {
         fetchData("上海")
     }
+
     /**
      *
-     * @param place String  传递进来的数据不可能为null,该判断的在外面都判断了
      */
     fun fetchData(place: String) {
         Log.d(TAG, "fetchData: ")
         withState { state ->
             if (state.request is Loading) return@withState //避免重复请求
-
 
             apiService
                 .search(query = place, page = state.page)

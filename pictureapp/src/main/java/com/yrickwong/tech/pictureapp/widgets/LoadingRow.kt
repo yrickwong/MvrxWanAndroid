@@ -1,4 +1,4 @@
-package com.yrickwong.tech.pictureapp.views
+package com.yrickwong.tech.pictureapp.widgets
 
 import android.content.Context
 import android.util.AttributeSet

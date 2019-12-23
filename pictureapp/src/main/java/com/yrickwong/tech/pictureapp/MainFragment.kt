@@ -7,17 +7,19 @@ import android.text.TextUtils
 import android.util.Log
 import android.view.*
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.epoxy.EpoxyItemSpacingDecorator
 import com.airbnb.epoxy.EpoxyRecyclerView
-import com.airbnb.mvrx.*
+import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.PersistState
+import com.airbnb.mvrx.activityViewModel
 import com.yrickwong.tech.pictureapp.core.BaseEpoxyFragment
 import com.yrickwong.tech.pictureapp.core.MvRxViewModel
 import com.yrickwong.tech.pictureapp.core.simpleController
 import com.yrickwong.tech.pictureapp.feature.PictureViewModel
-import com.yrickwong.tech.pictureapp.views.loadingRow
-import com.yrickwong.tech.pictureapp.views.pictureSquare
+import com.yrickwong.tech.pictureapp.widgets.loadingRow
+import com.yrickwong.tech.pictureapp.widgets.pictureSquare
 
 
 private const val SPAN_COUNT = 3
@@ -28,9 +30,10 @@ enum class LayoutManagerType {
     LIST_STYLE
 }
 
-data class StyleState(@PersistState val layoutManagerType: LayoutManagerType = LayoutManagerType.GRID_STYLE) :
+data class StyleState(@PersistState val layoutManagerType: LayoutManagerType = LayoutManagerType.LIST_STYLE) :
     MvRxState
 
+//在ViewModel中操作state均是在background线程
 class StyleViewModel(styleState: StyleState) : MvRxViewModel<StyleState>(styleState) {
 
     fun changeStyle(style: LayoutManagerType) {
@@ -45,7 +48,7 @@ class MainFragment : BaseEpoxyFragment() {
 
 
     private lateinit var recyclerView: EpoxyRecyclerView
-    private lateinit var searchView: androidx.appcompat.widget.SearchView
+    private lateinit var searchView: SearchView
     private val pictureViewModel: PictureViewModel by activityViewModel()
     private val styleViewModel: StyleViewModel by activityViewModel()
 
@@ -63,6 +66,7 @@ class MainFragment : BaseEpoxyFragment() {
         return inflater.inflate(R.layout.fragment_main, container, false).apply {
             recyclerView = findViewById(R.id.recycleView)
             recyclerView.setController(epoxyController)
+            recyclerView.addItemDecoration(EpoxyItemSpacingDecorator(8.dp))
         }
     }
 
@@ -81,10 +85,8 @@ class MainFragment : BaseEpoxyFragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.main_menu, menu)
-        searchView =
-            menu.findItem(R.id.item_searchview).actionView as androidx.appcompat.widget.SearchView
-        searchView.setOnQueryTextListener(object :
-            androidx.appcompat.widget.SearchView.OnQueryTextListener {
+        searchView = menu.findItem(R.id.item_searchview).actionView as SearchView
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (TextUtils.isEmpty(query)) {
                     requireActivity().showToast("请求内容不能为空!")
@@ -104,8 +106,8 @@ class MainFragment : BaseEpoxyFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        styleViewModel.subscribe { styleState ->
-            when (styleState.layoutManagerType) {
+        styleViewModel.selectSubscribe(StyleState::layoutManagerType) { type ->
+            when (type) {
                 LayoutManagerType.GRID_STYLE -> {
                     Log.d(TAG, "invalidate: GRID_STYLE")
                     val gridLayoutManager = GridLayoutManager(
@@ -113,37 +115,36 @@ class MainFragment : BaseEpoxyFragment() {
                         SPAN_COUNT
                     )
                     epoxyController.spanCount = SPAN_COUNT
-                    gridLayoutManager.spanSizeLookup = epoxyController.spanSizeLookup
                     recyclerView.apply {
-                        if (itemDecorationCount == 0) {
-                            addItemDecoration(
-                                EpoxyItemSpacingDecorator(8.dp)
-                            )
-                        }
                         layoutManager = gridLayoutManager
                     }
                 }
                 LayoutManagerType.LIST_STYLE -> {
                     Log.d(TAG, "invalidate: LIST_STYLE")
-                    val linearLayoutManager = LinearLayoutManager(requireContext())
+                    val gridLayoutManager = GridLayoutManager(
+                        requireContext(),
+                        1
+                    )
+                    epoxyController.spanCount = 1
+                    gridLayoutManager.spanSizeLookup = epoxyController.spanSizeLookup
                     recyclerView.apply {
-                        if (itemDecorationCount == 0) {
-                            addItemDecoration(
-                                EpoxyItemSpacingDecorator(8.dp)
-                            )
-                        }
-                        layoutManager = linearLayoutManager
+                        layoutManager = gridLayoutManager
                     }
                 }
             }
         }
+
     }
 
+    //在View中操作state均是在UI线程
     override fun epoxyController() = simpleController(pictureViewModel) { pictureState ->
         pictureState.pictures.forEach { pic ->
             pictureSquare {
-                id(pic.id.hashCode())
+                id(pic.id)
                 picture(pic)
+                clickListener { _ ->
+
+                }
             }
         }
         //判断条件是什么？
@@ -157,6 +158,7 @@ class MainFragment : BaseEpoxyFragment() {
                 }
             }
         }
+
     }
 }
 

@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.airbnb.epoxy.EpoxyRecyclerView
-import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.activityViewModel
 import com.yrickwong.tech.mvrx.R
 import com.yrickwong.tech.mvrx.core.BaseEpoxyFragment
