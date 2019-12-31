@@ -67,4 +67,8 @@ dependencies {
 
     //webview
     implementation "com.just.agentweb:agentweb:$agentweb_version"
+
+
+    // ViewPagerIndicator
+    implementation 'me.relex:circleindicator:2.1.4'
 }

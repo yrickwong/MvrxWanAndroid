@@ -17,10 +17,7 @@ import com.yrickwong.tech.mvrx.feature.article.ArticleViewModel
 import com.yrickwong.tech.mvrx.feature.banner.BannerState
 import com.yrickwong.tech.mvrx.feature.banner.BannerViewModel
 import com.yrickwong.tech.mvrx.feature.webview.WebViewDetailArgs
-import com.yrickwong.tech.mvrx.views.BannerRowModel_
-import com.yrickwong.tech.mvrx.views.articleRow
-import com.yrickwong.tech.mvrx.views.carouselPageSnap
-import com.yrickwong.tech.mvrx.views.loadingRow
+import com.yrickwong.tech.mvrx.views.*
 import kotlinx.android.synthetic.main.fragment_main.*
 
 
@@ -80,23 +77,16 @@ class MainFragment : BaseEpoxyFragment() {
 
     override fun epoxyController() =
         simpleController(bannerViewModel, articleViewModel) { bannerState, articleState ->
-            carouselPageSnap {
-                id("carousel")
-                models(mutableListOf<BannerRowModel_>().apply {
-                    bannerState.banners.forEach { banner ->
-                        add(
-                            BannerRowModel_()
-                                .id(banner.id)
-                                .banner(banner)
-                                .clickListener { _ ->
-                                    navigateTo(
-                                        R.id.action_to_webview_fragment,
-                                        WebViewDetailArgs(banner.url, banner.title)
-                                    )
-                                }
-                        )
-                    }
-                })
+
+            bannerItemView {
+                id("banner")
+                banners(bannerState.banners)
+                clickListener { banner ->
+                    navigateTo(
+                        R.id.action_to_webview_fragment,
+                        WebViewDetailArgs(banner.url, banner.title)
+                    )
+                }
             }
 
             articleState.articles.forEach { art ->
@@ -125,4 +115,5 @@ class MainFragment : BaseEpoxyFragment() {
         }
 }
 
+//扩展函数
 fun Context.showToast(text: CharSequence) = Toast.makeText(this, text, Toast.LENGTH_SHORT).show()

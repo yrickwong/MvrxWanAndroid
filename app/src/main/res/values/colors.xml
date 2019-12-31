@@ -9,5 +9,6 @@
     <color name="black_trans">#5c000000</color>
     <color name="colorBlack666">#666</color>
     <color name="colorBlack333">#333</color>
-
+    <color name="indicatorNormal">#80FFFFFF</color>
+    <color name="gray">#949494</color>
 </resources>
