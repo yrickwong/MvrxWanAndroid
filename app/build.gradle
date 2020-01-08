@@ -71,4 +71,6 @@ dependencies {
 
     // ViewPagerIndicator
     implementation 'me.relex:circleindicator:2.1.4'
+
+    implementation 'de.hdodenhof:circleimageview:3.0.1'
 }

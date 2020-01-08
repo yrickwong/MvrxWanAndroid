@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:id="@+id/other">
+
+        <item
+            android:id="@+id/nav_collect"
+            android:icon="@drawable/ic_like_not_24dp"
+            android:title="@string/nav_my_collect" />
+
+
+        <item
+            android:id="@+id/nav_setting"
+            android:icon="@drawable/ic_setting_24dp"
+            android:title="@string/nav_setting" />
+
+
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_logout_white_24dp"
+            android:title="@string/nav_logout" />
+
+    </group>
+
+</menu>

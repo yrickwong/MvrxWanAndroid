@@ -22,6 +22,7 @@ import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,6 +65,21 @@ public class LoopViewPager extends ViewPager {
         mBoundaryLooping = flag;
         if (mAdapter != null) {
             mAdapter.setBoundaryLooping(flag);
+        }
+    }
+
+    /**
+     * 设置调用setCurrentItem(int item, boolean smoothScroll)方法时，page切换的时间长度
+     *
+     * @param duration page切换的时间长度
+     */
+    public void setPageChangeDuration(int duration) {
+        try {
+            Field scrollerField = ViewPager.class.getDeclaredField("mScroller");
+            scrollerField.setAccessible(true);
+            scrollerField.set(this, new BannerScroller(getContext(), duration));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

@@ -32,32 +32,35 @@ class BannerItemView @JvmOverloads constructor(
 
     init {
         LayoutInflater.from(context).inflate(R.layout.banner_item_view, this, true)
-        bannerViewPager.addOnPageChangeListener(object : SimpleOnPageChangeListener {
-            override fun onPageScrollStateChanged(state: Int) {
-                super.onPageScrollStateChanged(state)
-                when (state) {
-                    ViewPager.SCROLL_STATE_DRAGGING -> {
-                        stopAutoPlay()
+        bannerViewPager.run {
+            setPageChangeDuration(800)
+            addOnPageChangeListener(object : SimpleOnPageChangeListener {
+                override fun onPageScrollStateChanged(state: Int) {
+                    super.onPageScrollStateChanged(state)
+                    when (state) {
+                        ViewPager.SCROLL_STATE_DRAGGING -> {
+                            stopAutoPlay()
+                        }
+                        ViewPager.SCROLL_STATE_SETTLING -> {
+                            stopAutoPlay()
+                        }
+                        ViewPager.SCROLL_STATE_IDLE -> {
+                            startAutoPlay()
+                        }
                     }
-                    ViewPager.SCROLL_STATE_SETTLING -> {
-                        stopAutoPlay()
-                    }
-                    ViewPager.SCROLL_STATE_IDLE -> {
-                        startAutoPlay()
-                    }
+
                 }
 
-            }
 
-
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                if (bannerViewPager.adapter == null || bannerViewPager.adapter!!.count <= 0) {
-                    return
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    if (bannerViewPager.adapter == null || bannerViewPager.adapter!!.count <= 0) {
+                        return
+                    }
+                    this@BannerItemView.nameView.text = bannerAdapter.getBanner(position).title
                 }
-                nameView.text = bannerAdapter.getBanner(position).title
-            }
-        })
+            })
+        }
     }
 
     override fun onDetachedFromWindow() {

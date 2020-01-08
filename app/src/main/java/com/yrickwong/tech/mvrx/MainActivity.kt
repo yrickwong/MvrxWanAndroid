@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.util.Log
 import android.view.View.*
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
@@ -30,7 +31,38 @@ class MainActivity : BaseMvRxActivity() {
         if (savedInstanceState == null) {
             setupBottomNavigationBar()
         }
+
+        toolbar.run {
+            title = getString(R.string.app_name)
+            setSupportActionBar(this)
+        }
+        initDrawerLayout()
+        nav_view.run {
+            
+            setNavigationItemSelectedListener { item ->
+                when (item.itemId) {
+
+                }
+            }
+        }
         currentNavController?.value?.setDestinationChangedListener()
+    }
+
+    /**
+     * init DrawerLayout
+     */
+    private fun initDrawerLayout() {
+        drawer_layout.run {
+            val toggle = ActionBarDrawerToggle(
+                this@MainActivity,
+                this,
+                toolbar
+                , R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close
+            )
+            addDrawerListener(toggle)
+            toggle.syncState()
+        }
     }
 
 
