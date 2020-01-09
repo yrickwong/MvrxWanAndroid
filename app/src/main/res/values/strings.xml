@@ -9,8 +9,14 @@
     <string name="title_wechat">WeChat</string>
     <string name="title_navigator">Navigator</string>
     <string name="title_project">Projects</string>
-    <string name="login">登录</string>
+    <string name="login">Sign in</string>
     <string name="nav_logout">登出</string>
     <string name="nav_my_collect">收藏</string>
     <string name="nav_setting">设置</string>
+    <string name="no_account">Don\'t have an account?</string>
+    <string name="username">UserName</string>
+    <string name="password">Password</string>
+    <string name="sign_text">Sign in to WanAndroid</string>
+    <string name="username_not_empty">UserName not be empty</string>
+    <string name="password_not_empty">Password not be empty</string>
 </resources>

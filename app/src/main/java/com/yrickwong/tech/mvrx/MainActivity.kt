@@ -1,16 +1,20 @@
 package com.yrickwong.tech.mvrx
 
 import android.animation.ObjectAnimator
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View.*
+import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.airbnb.mvrx.BaseMvRxActivity
 import com.airbnb.mvrx.MvRx
+import com.yrickwong.tech.mvrx.feature.login.LoginActivity
 import com.yrickwong.tech.mvrx.feature.webview.WebViewDetailArgs
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar.*
@@ -19,6 +23,11 @@ import kotlinx.android.synthetic.main.toolbar.*
 const val TAG = "MainActivity"
 
 class MainActivity : BaseMvRxActivity() {
+
+    /**
+     * username TextView
+     */
+    private var nav_username: TextView? = null
 
     private var outAnimator: ObjectAnimator? = null
     private var inAnimator: ObjectAnimator? = null
@@ -38,11 +47,25 @@ class MainActivity : BaseMvRxActivity() {
         }
         initDrawerLayout()
         nav_view.run {
-            
             setNavigationItemSelectedListener { item ->
                 when (item.itemId) {
 
                 }
+            }
+            nav_username = getHeaderView(0).findViewById(R.id.tv_username)
+            setOnClickListener {
+                Intent(this@MainActivity, LoginActivity::class.java).run {
+                    startActivity(this)
+                }
+            }
+
+        }
+        nav_username?.run {
+            setOnClickListener {
+                Intent(this@MainActivity, LoginActivity::class.java).run {
+                    startActivity(this)
+                }
+
             }
         }
         currentNavController?.value?.setDestinationChangedListener()

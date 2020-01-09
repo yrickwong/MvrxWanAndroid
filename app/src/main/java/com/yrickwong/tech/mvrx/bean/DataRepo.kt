@@ -85,3 +85,16 @@ data class WXChapterBean(
     @Json(name = "userControlSetTop") val userControlSetTop: Boolean,
     @Json(name = "visible") val visible: Int
 )
+
+@JsonClass(generateAdapter = true) //防止反射
+data class Account(
+    @Json(name = "chapterTops") val chapterTops: MutableList<String>,
+    @Json(name = "collectIds") val collectIds: MutableList<String>,
+    @Json(name = "email") val email: String,
+    @Json(name = "icon") val icon: String,
+    @Json(name = "id") val id: Int,
+    @Json(name = "password") val password: String,
+    @Json(name = "token") val token: String,
+    @Json(name = "type") val type: Int,
+    @Json(name = "username") val username: String
+)

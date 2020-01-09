@@ -25,13 +25,6 @@ abstract class BaseEpoxyFragment : BaseMvRxFragment() {
         epoxyController.requestModelBuild()
     }
 
-//    protected fun subscribeVM(vararg viewModels: BaseMvRxViewModel<*>) {
-//        viewModels.forEach {
-//            it.subscribe(owner = this, subscriber = {
-//                postInvalidate()
-//            })
-//        }
-//    }
 
     abstract fun epoxyController(): MvRxEpoxyController
 

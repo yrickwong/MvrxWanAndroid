@@ -73,4 +73,7 @@ dependencies {
     implementation 'me.relex:circleindicator:2.1.4'
 
     implementation 'de.hdodenhof:circleimageview:3.0.1'
+
+    //lottie
+    implementation 'com.airbnb.android:lottie:3.0.0'
 }

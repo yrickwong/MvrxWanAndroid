@@ -2,9 +2,7 @@ package com.yrickwong.tech.mvrx.network
 
 import com.yrickwong.tech.mvrx.bean.*
 import io.reactivex.Observable
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface ApiService {
 
@@ -41,4 +39,14 @@ interface ApiService {
     @GET("article/list/{page}/json")
     fun fetchKnowledgeList(@Path("page") page: Int, @Query("cid") cid: Int): Observable<HttpResult<ArticleList>>
 
+
+    /**
+     * 登录
+     * http://www.wanandroid.com/user/login
+     * @param username
+     * @param password
+     */
+    @POST("user/login")
+    @FormUrlEncoded
+    fun signIn(@Field("username") username: String, @Field("password") password: String): Observable<HttpResult<Account>>
 }
