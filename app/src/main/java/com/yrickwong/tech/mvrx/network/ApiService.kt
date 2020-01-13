@@ -19,7 +19,7 @@ interface ApiService {
      * http://www.wanandroid.com/article/list/0/json
      * @param pageNum
      */
-    @GET("article/list/{pageNum}/json")
+    @GET("/article/list/{pageNum}/json")
     fun getArticles(@Path("pageNum") pageNum: Int): Observable<HttpResult<ArticleList>>
 
     /**
@@ -36,7 +36,7 @@ interface ApiService {
      * @param page
      * @param cid
      */
-    @GET("article/list/{page}/json")
+    @GET("/article/list/{page}/json")
     fun fetchKnowledgeList(@Path("page") page: Int, @Query("cid") cid: Int): Observable<HttpResult<ArticleList>>
 
 
@@ -46,7 +46,7 @@ interface ApiService {
      * @param username
      * @param password
      */
-    @POST("user/login")
+    @POST("/user/login")
     @FormUrlEncoded
     fun signIn(@Field("username") username: String, @Field("password") password: String): Observable<HttpResult<Account>>
 }

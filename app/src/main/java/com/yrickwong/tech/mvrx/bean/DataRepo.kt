@@ -2,10 +2,11 @@ package com.yrickwong.tech.mvrx.bean
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import io.reactivex.functions.Function
 
 @JsonClass(generateAdapter = true)
 data class HttpResult<T>(
-    @Json(name = "data") val data: T
+    @Json(name = "data") val data: T?
 ) : BaseResponse()
 
 @JsonClass(generateAdapter = true)
@@ -22,8 +23,8 @@ data class Banner(
 
 @JsonClass(generateAdapter = true)
 open class BaseResponse(
-    @Json(name = "errorCode") val errorCode: Int = 0,
-    @Json(name = "errorMsg") val errorMsg: String = ""
+    @Json(name = "errorCode") var errorCode: Int = 0,
+    @Json(name = "errorMsg") var errorMsg: String = ""
 )
 
 //文章
@@ -86,7 +87,7 @@ data class WXChapterBean(
     @Json(name = "visible") val visible: Int
 )
 
-@JsonClass(generateAdapter = true) //防止反射
+@JsonClass(generateAdapter = true)
 data class Account(
     @Json(name = "chapterTops") val chapterTops: MutableList<String>,
     @Json(name = "collectIds") val collectIds: MutableList<String>,
@@ -98,3 +99,11 @@ data class Account(
     @Json(name = "type") val type: Int,
     @Json(name = "username") val username: String
 )
+
+
+/**
+ * 对网络请求返回的数据类型进行转换，HttpResult<T> -> T
+ */
+inline fun <reified T> unwrapData() = Function<HttpResult<T>, T> {
+    it.data
+}

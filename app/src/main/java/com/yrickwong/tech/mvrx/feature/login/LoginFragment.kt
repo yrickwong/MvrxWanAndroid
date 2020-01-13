@@ -5,17 +5,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
-import com.airbnb.epoxy.EpoxyRecyclerView
 import com.airbnb.mvrx.*
 import com.yrickwong.tech.mvrx.R
 import com.yrickwong.tech.mvrx.bean.Account
 import com.yrickwong.tech.mvrx.bean.HttpResult
-import com.yrickwong.tech.mvrx.core.BaseEpoxyFragment
 import com.yrickwong.tech.mvrx.core.MvRxViewModel
-import com.yrickwong.tech.mvrx.core.simpleController
-import com.yrickwong.tech.mvrx.feature.banner.BannerState
-import com.yrickwong.tech.mvrx.feature.banner.BannerViewModel
 import com.yrickwong.tech.mvrx.network.ApiService
 import kotlinx.android.synthetic.main.fragment_login.*
 import org.koin.android.ext.android.inject
@@ -26,9 +22,10 @@ data class LoginState(val loginRequest: Async<HttpResult<Account>> = Uninitializ
 class LoginViewModel(loginState: LoginState, private val apiService: ApiService) :
     MvRxViewModel<LoginState>(loginState) {
 
-    fun login(username: String, password: String) = withState { state ->
+    fun signIn(username: String, password: String) = withState { state ->
         if (state.loginRequest is Loading) return@withState //避免重复请求
-        Log.d("wangyi", "login: ")
+
+        //添加subscribeOn为了有loading效果
         apiService.signIn(username, password).execute {
             copy(loginRequest = it)
         }
@@ -62,12 +59,18 @@ class LoginFragment : BaseMvRxFragment() {
         super.onViewCreated(view, savedInstanceState)
         btn_login.setOnClickListener {
             if (validate()) {
-                loginViewModel.login(et_username.text.toString(), et_password.text.toString())
+                loginViewModel.signIn(et_username.text.toString(), et_password.text.toString())
             }
         }
         loginViewModel.asyncSubscribe(LoginState::loginRequest,
-            onSuccess = {
-                Log.d("wangyi", "onSuccess: ")
+
+            onSuccess = { result ->
+                if (result.data == null) {
+                    Toast.makeText(requireContext(), result.errorMsg, Toast.LENGTH_SHORT).show()
+                } else {
+
+                }
+
             },
             onFail = {
                 Log.d("wangyi", "error=${it.printStackTrace()} ")

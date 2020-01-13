@@ -51,7 +51,7 @@ class ArticleViewModel(state: ArticleState, private val apiService: ApiService) 
             if (state.request is Loading) return@withState //避免重复请求
 
             apiService.getArticles(pageNum = state.page).map {
-                HttpResult(it.data.datas)
+                HttpResult(it.data?.datas)
             }.execute {
                 copy(
                     request = it,
@@ -66,7 +66,7 @@ class ArticleViewModel(state: ArticleState, private val apiService: ApiService) 
         top: HttpResult<List<Article>>,
         page: HttpResult<ArticleList>
     ): HttpResult<List<Article>> {
-        return HttpResult(top.data + page.data.datas)
+        return HttpResult(top.data?.plus(page.data!!.datas))
     }
 
     companion object : MvRxViewModelFactory<ArticleViewModel, ArticleState> {

@@ -23,10 +23,19 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    dexOptions {
+        preDexLibraries true
+        maxProcessCount 8
+    }
 }
 
 kapt {
     correctErrorTypes = true
+    useBuildCache = true
+    javacOptions {
+        option("-Xmaxerrs", 500)
+    }
 }
 androidExtensions {
     //in gradle to enable Parcelize

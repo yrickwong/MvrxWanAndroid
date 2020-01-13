@@ -54,7 +54,7 @@ class KnowledgeViewModel(state: KnowledgeState, private val apiService: ApiServi
             if (state.request is Loading) return@withState //避免重复请求
 
             apiService.fetchKnowledgeList(0, cid = state.id)
-                .map { HttpResult(it.data.datas) }
+                .map { HttpResult(it.data?.datas) }
                 .execute {
                     copy(
                         request = it,
@@ -70,7 +70,7 @@ class KnowledgeViewModel(state: KnowledgeState, private val apiService: ApiServi
             if (state.request is Loading) return@withState //避免重复请求
 
             apiService.fetchKnowledgeList(page = state.page, cid = state.id)
-                .map { HttpResult(it.data.datas) }
+                .map { HttpResult(it.data?.datas) }
                 .execute {
                     copy(
                         request = it,
