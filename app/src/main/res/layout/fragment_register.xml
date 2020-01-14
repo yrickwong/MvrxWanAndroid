@@ -26,7 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/dp_60"
-                android:text="@string/sign_text"
+                android:text="@string/create_account_text"
                 android:textColor="@color/text_color"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -77,29 +77,29 @@
                     android:textSize="@dimen/sp_14" />
             </com.google.android.material.textfield.TextInputLayout>
 
-
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_10"
                 android:background="@drawable/textview_border"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:paddingLeft="@dimen/dp_8"
                 android:paddingRight="@dimen/dp_8"
-                android:paddingBottom="@dimen/dp_8"
-                android:visibility="invisible">
+                android:paddingBottom="@dimen/dp_8">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_password1"
+                    android:id="@+id/et_password_confirm"
                     android:layout_width="match_parent"
                     android:layout_height="32dp"
                     android:background="@null"
-                    android:hint="@string/password"
+                    android:hint="@string/confirm_password"
                     android:inputType="textPassword"
                     android:textSize="@dimen/sp_14" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
-                android:id="@+id/btn_login"
+                android:id="@+id/btn_create_account"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_24"
@@ -107,18 +107,18 @@
                 android:background="@drawable/btn_login_bg"
                 android:gravity="center"
                 android:padding="@dimen/dp_12"
-                android:text="@string/login"
+                android:text="@string/text_continue"
                 android:textColor="@color/White"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tv_sign_up"
+                android:id="@+id/tv_sign_in"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/dp_24"
                 android:gravity="center"
-                android:text="@string/no_account"
+                android:text="@string/have_account"
                 android:textColor="@color/black"
                 android:textSize="@dimen/sp_12" />
 

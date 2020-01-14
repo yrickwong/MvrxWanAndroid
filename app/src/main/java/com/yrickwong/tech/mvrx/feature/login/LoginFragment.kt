@@ -1,21 +1,32 @@
 package com.yrickwong.tech.mvrx.feature.login
 
+import android.graphics.Color
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
+import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.airbnb.mvrx.*
 import com.yrickwong.tech.mvrx.R
 import com.yrickwong.tech.mvrx.bean.Account
 import com.yrickwong.tech.mvrx.bean.HttpResult
 import com.yrickwong.tech.mvrx.core.MvRxViewModel
 import com.yrickwong.tech.mvrx.network.ApiService
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_login.*
 import org.koin.android.ext.android.inject
 
+private const val REGISTER_STRING = "Don\\'t have an account? Sign up"
+private const val REGISTER_ONE = "Sign up"
 
 data class LoginState(val loginRequest: Async<HttpResult<Account>> = Uninitialized) : MvRxState
 
@@ -26,7 +37,7 @@ class LoginViewModel(loginState: LoginState, private val apiService: ApiService)
         if (state.loginRequest is Loading) return@withState //避免重复请求
 
         //添加subscribeOn为了有loading效果
-        apiService.signIn(username, password).execute {
+        apiService.signIn(username, password).subscribeOn(Schedulers.io()).execute {
             copy(loginRequest = it)
         }
     }
@@ -66,16 +77,31 @@ class LoginFragment : BaseMvRxFragment() {
 
             onSuccess = { result ->
                 if (result.data == null) {
-                    Toast.makeText(requireContext(), result.errorMsg, Toast.LENGTH_SHORT).show()
+                    this@LoginFragment.showToast(result.errorMsg)
                 } else {
-
+                    showToast("login success!")
+                    requireActivity().finish()
                 }
-
             },
             onFail = {
                 Log.d("wangyi", "error=${it.printStackTrace()} ")
             }
         )
+        tv_sign_up.text = getClickableSpan()
+        tv_sign_up.movementMethod = LinkMovementMethod.getInstance()
+    }
+
+    private fun getClickableSpan(): SpannableString {
+        val spanStr = SpannableString(REGISTER_STRING)
+        //设置文字的单击事件
+        spanStr.setSpan(object : ClickableSpan() {
+            override fun onClick(widget: View) {
+                findNavController().navigate(R.id.action_to_register_fragment)
+            }
+        }, REGISTER_STRING.length-REGISTER_ONE.length, REGISTER_STRING.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        //设置文字的前景色
+        spanStr.setSpan(ForegroundColorSpan(Color.RED), REGISTER_STRING.length-REGISTER_ONE.length, REGISTER_STRING.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        return spanStr
     }
 
     override fun invalidate() = withState(loginViewModel) { state ->
@@ -102,3 +128,7 @@ class LoginFragment : BaseMvRxFragment() {
 
     }
 }
+
+//扩展函数
+fun Fragment.showToast(text: CharSequence) =
+    Toast.makeText(requireContext(), text, Toast.LENGTH_SHORT).show()

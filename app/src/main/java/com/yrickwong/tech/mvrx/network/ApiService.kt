@@ -49,4 +49,18 @@ interface ApiService {
     @POST("/user/login")
     @FormUrlEncoded
     fun signIn(@Field("username") username: String, @Field("password") password: String): Observable<HttpResult<Account>>
+
+
+    /**
+     * 注册
+     * http://www.wanandroid.com/user/register
+     * @param username
+     * @param password
+     * @param repassword
+     */
+    @POST("/user/register")
+    @FormUrlEncoded
+    fun registerWanAndroid(@Field("username") username: String,
+                           @Field("password") password: String,
+                           @Field("repassword") repassword: String): Observable<HttpResult<Account>>
 }
