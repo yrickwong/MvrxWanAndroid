@@ -1,21 +1,21 @@
 package com.yrickwong.tech.pictureapp.feature
 
+import android.text.TextUtils
 import android.util.Log
-import androidx.lifecycle.LiveData
 import com.airbnb.mvrx.*
 import com.yrickwong.tech.pictureapp.ApiService
+import com.yrickwong.tech.pictureapp.PICTURE_PER_PAGE
 import com.yrickwong.tech.pictureapp.bean.HttpResult
 import com.yrickwong.tech.pictureapp.bean.Picture
 import com.yrickwong.tech.pictureapp.core.MvRxViewModel
+import io.reactivex.schedulers.Schedulers
 import org.koin.android.ext.android.inject
 
-private const val FIRST_PAGE = 0
-
 private const val TAG = "wangyi"
+private const val DEFAULT_PLACE = "上海"
 
 data class PictureState(
-    val page: Int = FIRST_PAGE,
-    val place: String = "",
+    val place: String? = null,
     val pictures: List<Picture> = emptyList(),
     val request: Async<HttpResult<List<Picture>>> = Uninitialized
 ) : MvRxState
@@ -24,23 +24,24 @@ class PictureViewModel(pictureState: PictureState, private val apiService: ApiSe
     MvRxViewModel<PictureState>(pictureState) {
 
     init {
-        fetchData("上海")
+        fetchData(DEFAULT_PLACE)
     }
 
-    /**
-     *
-     */
-    fun fetchData(place: String) {
-        Log.d(TAG, "fetchData: ")
+    fun reloadData() {
         withState { state ->
-            if (state.request is Loading) return@withState //避免重复请求
+            Log.d(TAG, "reloadData: place=${state.place}")
+            if (state.request is Loading||TextUtils.isEmpty(state.place)) return@withState //避免重复请求
 
             apiService
-                .search(query = place, page = state.page)
+                .search(
+                    query = state.place!!,
+                    page = 1,
+                    limit = PICTURE_PER_PAGE
+                )
+                .subscribeOn(Schedulers.io())
                 .execute {
                     copy(
                         request = it,
-                        page = state.page + 1,
                         place = place,
                         pictures = (it()?.data ?: emptyList())
                     )
@@ -48,23 +49,53 @@ class PictureViewModel(pictureState: PictureState, private val apiService: ApiSe
         }
     }
 
+    fun fetchData(place: String) {
+        Log.d(TAG, "fetchData: place=$place")
+        withState { state ->
+            if (state.request is Loading) return@withState //避免重复请求
+
+            apiService
+                .search(
+                    query = place,
+                    page = 1,
+                    limit = PICTURE_PER_PAGE
+                )
+                .subscribeOn(Schedulers.io())
+                .execute {
+                    copy(
+                        request = it,
+                        place = place,
+                        pictures = (it()?.data ?: emptyList())
+                    )
+                }
+        }
+    }
+
+    /**
+     * 获取数据
+     */
     fun fetchNextPage() {
         Log.d(TAG, "fetchNextPage: ")
         withState { state ->
             if (state.request is Loading) return@withState //避免重复请求
 
             apiService
-                .search(query = state.place, page = state.page)
+                .search(
+                    query = state.place ?: "",
+                    page = state.pictures.size / PICTURE_PER_PAGE + 1,
+                    limit = PICTURE_PER_PAGE
+                )
+                .subscribeOn(Schedulers.io())
                 .execute {
                     copy(
                         request = it,
-                        place = state.place,
-                        page = state.page + 1,
+                        place = place,
                         pictures = pictures + (it()?.data ?: emptyList())
                     )
                 }
         }
     }
+
 
     companion object : MvRxViewModelFactory<PictureViewModel, PictureState> {
 

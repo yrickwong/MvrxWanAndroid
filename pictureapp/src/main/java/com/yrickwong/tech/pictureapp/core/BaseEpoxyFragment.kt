@@ -1,11 +1,9 @@
 package com.yrickwong.tech.pictureapp.core
 
 import android.os.Bundle
-import android.util.Log
 import com.airbnb.mvrx.BaseMvRxFragment
 
-//Mvrx + Epoxy
-private const val TAG = "wangyi"
+
 
 abstract class BaseEpoxyFragment : BaseMvRxFragment() {
 
@@ -17,7 +15,6 @@ abstract class BaseEpoxyFragment : BaseMvRxFragment() {
     }
 
     override fun invalidate() {
-        Log.d(TAG, "invalidate: BaseEpoxyFragment")
         epoxyController.requestModelBuild()
     }
 
@@ -30,7 +27,6 @@ abstract class BaseEpoxyFragment : BaseMvRxFragment() {
     }
 
     override fun onDestroyView() {
-
         epoxyController.cancelPendingModelBuild()
         super.onDestroyView()
     }

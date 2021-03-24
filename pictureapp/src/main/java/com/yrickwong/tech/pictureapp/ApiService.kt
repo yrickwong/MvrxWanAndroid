@@ -7,6 +7,8 @@ import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Query
 
+const val PICTURE_PER_PAGE = 10
+
 interface ApiService {
 
     @Headers("Accept: application/json")
@@ -14,7 +16,7 @@ interface ApiService {
     fun search(
         @Query("q") query: String,
         @Query("sn") page: Int,
-        @Query("pn") limit: Int = 10
+        @Query("pn") limit: Int = PICTURE_PER_PAGE
     ): Single<HttpResult<List<Picture>>>
 
 }

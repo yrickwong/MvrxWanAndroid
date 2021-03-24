@@ -19,7 +19,13 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -39,7 +45,7 @@ androidExtensions {
 }
 
 dependencies {
-    implementation 'com.airbnb.android:mvrx:1.0.2' //mvvm arch
+    implementation 'com.airbnb.android:mvrx:1.3.0' //mvvm arch
     implementation "androidx.navigation:navigation-fragment-ktx:$navVersion"
     implementation "androidx.navigation:navigation-ui-ktx:$navVersion"
 
@@ -76,6 +82,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
 
     //image load
-    implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.squareup.picasso:picasso:2.8'
     implementation 'com.github.bumptech.glide:glide:4.10.0'
+    implementation("io.coil-kt:coil:1.1.1")
 }

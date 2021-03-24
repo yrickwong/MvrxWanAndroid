@@ -1,12 +1,10 @@
 package com.yrickwong.tech.pictureapp
 
 import android.os.Bundle
-import android.view.Menu
-import androidx.appcompat.widget.SearchView
-import com.airbnb.mvrx.BaseMvRxActivity
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : BaseMvRxActivity() {
+class MainActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

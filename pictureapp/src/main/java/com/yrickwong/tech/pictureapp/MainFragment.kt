@@ -9,14 +9,15 @@ import android.view.*
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.airbnb.epoxy.EpoxyItemSpacingDecorator
 import com.airbnb.epoxy.EpoxyRecyclerView
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.PersistState
-import com.airbnb.mvrx.activityViewModel
+import com.airbnb.mvrx.*
+import com.google.android.material.snackbar.Snackbar
 import com.yrickwong.tech.pictureapp.core.BaseEpoxyFragment
 import com.yrickwong.tech.pictureapp.core.MvRxViewModel
 import com.yrickwong.tech.pictureapp.core.simpleController
+import com.yrickwong.tech.pictureapp.feature.PictureState
 import com.yrickwong.tech.pictureapp.feature.PictureViewModel
 import com.yrickwong.tech.pictureapp.widgets.loadingRow
 import com.yrickwong.tech.pictureapp.widgets.pictureSquare
@@ -45,8 +46,7 @@ class StyleViewModel(styleState: StyleState) : MvRxViewModel<StyleState>(styleSt
 }
 
 class MainFragment : BaseEpoxyFragment() {
-
-
+    private lateinit var refreshLayout: SwipeRefreshLayout
     private lateinit var recyclerView: EpoxyRecyclerView
     private lateinit var searchView: SearchView
     private val pictureViewModel: PictureViewModel by activityViewModel()
@@ -64,6 +64,7 @@ class MainFragment : BaseEpoxyFragment() {
     ): View? {
 
         return inflater.inflate(R.layout.fragment_main, container, false).apply {
+            refreshLayout = findViewById(R.id.swipeRefreshLayout)
             recyclerView = findViewById(R.id.recycleView)
             recyclerView.setController(epoxyController)
             recyclerView.addItemDecoration(EpoxyItemSpacingDecorator(8.dp))
@@ -133,10 +134,30 @@ class MainFragment : BaseEpoxyFragment() {
                 }
             }
         }
+        pictureViewModel.selectSubscribe(
+            PictureState::request,
+            PictureState::pictures,
+            UniqueOnly("pictureViewModel")
+        ) { request, pictures ->
+            when (request) {
+                is Success -> {
+                    refreshLayout.isRefreshing = false
+                }
+                is Fail -> {
+                    refreshLayout.isRefreshing = false
+                    Snackbar.make(recyclerView, "image request failed!", Snackbar.LENGTH_SHORT)
+                        .show()
+                }
+                is Loading -> {
+                }
+                else -> {
 
+                }
+            }
+        }
+        refreshLayout.setOnRefreshListener(pictureViewModel::reloadData)
     }
 
-    //在View中操作state均是在UI线程
     override fun epoxyController() = simpleController(pictureViewModel) { pictureState ->
         pictureState.pictures.forEach { pic ->
             pictureSquare {
@@ -147,18 +168,12 @@ class MainFragment : BaseEpoxyFragment() {
                 }
             }
         }
-        //判断条件是什么？
-        loadingRow {
-            // Changing the ID will force it to rebind when new data is loaded even if it is
-            // still on screen which will ensure that we trigger loading again.
-            id("loading${pictureState.page}")
-            onBind { _, _, _ ->
-                if (pictureState.page > 0) {
-                    pictureViewModel.fetchNextPage()
-                }
+        if (pictureState.pictures.isNotEmpty()) {
+            loadingRow {
+                id("loading${pictureState.pictures.size}")
+                onBind { _, _, _ -> pictureViewModel.fetchNextPage() }
             }
         }
-
     }
 }
 

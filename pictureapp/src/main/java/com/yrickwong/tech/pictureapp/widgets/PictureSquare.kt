@@ -4,6 +4,8 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
+import coil.load
+import coil.transform.CircleCropTransformation
 import com.airbnb.epoxy.CallbackProp
 import com.airbnb.epoxy.ModelProp
 import com.airbnb.epoxy.ModelView
@@ -26,7 +28,9 @@ class PictureSquare @JvmOverloads constructor(
 
     @ModelProp
     fun setPicture(picture: Picture) {
-        Glide.with(context).load(picture.thumb).into(thumb)
+        thumb.load(picture.thumb) {
+            crossfade(true)
+        }
         title.text = picture.title
     }
 
