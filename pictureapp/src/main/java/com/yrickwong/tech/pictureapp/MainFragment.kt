@@ -14,8 +14,7 @@ import com.airbnb.epoxy.EpoxyItemSpacingDecorator
 import com.airbnb.epoxy.EpoxyRecyclerView
 import com.airbnb.mvrx.*
 import com.google.android.material.snackbar.Snackbar
-import com.yrickwong.tech.pictureapp.core.BaseEpoxyFragment
-import com.yrickwong.tech.pictureapp.core.MvRxViewModel
+import com.yrickwong.tech.pictureapp.core.MavericksLauncherBaseFragment
 import com.yrickwong.tech.pictureapp.core.simpleController
 import com.yrickwong.tech.pictureapp.feature.PictureState
 import com.yrickwong.tech.pictureapp.feature.PictureViewModel
@@ -32,10 +31,10 @@ enum class LayoutManagerType {
 }
 
 data class StyleState(@PersistState val layoutManagerType: LayoutManagerType = LayoutManagerType.LIST_STYLE) :
-    MvRxState
+    MavericksState
 
 //在ViewModel中操作state均是在background线程
-class StyleViewModel(styleState: StyleState) : MvRxViewModel<StyleState>(styleState) {
+class StyleViewModel(styleState: StyleState) : MavericksViewModel<StyleState>(styleState) {
 
     fun changeStyle(style: LayoutManagerType) {
         setState {
@@ -45,7 +44,9 @@ class StyleViewModel(styleState: StyleState) : MvRxViewModel<StyleState>(styleSt
 
 }
 
-class MainFragment : BaseEpoxyFragment() {
+class MainFragment : MavericksLauncherBaseFragment() {
+//    private val binding: MainFragmentBinding by viewBinding()
+
     private lateinit var refreshLayout: SwipeRefreshLayout
     private lateinit var recyclerView: EpoxyRecyclerView
     private lateinit var searchView: SearchView
@@ -62,7 +63,6 @@ class MainFragment : BaseEpoxyFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         return inflater.inflate(R.layout.fragment_main, container, false).apply {
             refreshLayout = findViewById(R.id.swipeRefreshLayout)
             recyclerView = findViewById(R.id.recycleView)
@@ -107,7 +107,7 @@ class MainFragment : BaseEpoxyFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        styleViewModel.selectSubscribe(StyleState::layoutManagerType) { type ->
+        styleViewModel.onEach(StyleState::layoutManagerType) { type ->
             when (type) {
                 LayoutManagerType.GRID_STYLE -> {
                     Log.d(TAG, "invalidate: GRID_STYLE")
@@ -134,27 +134,18 @@ class MainFragment : BaseEpoxyFragment() {
                 }
             }
         }
-        pictureViewModel.selectSubscribe(
-            PictureState::request,
-            PictureState::pictures,
-            UniqueOnly("pictureViewModel")
-        ) { request, pictures ->
-            when (request) {
-                is Success -> {
-                    refreshLayout.isRefreshing = false
-                }
-                is Fail -> {
-                    refreshLayout.isRefreshing = false
-                    Snackbar.make(recyclerView, "image request failed!", Snackbar.LENGTH_SHORT)
-                        .show()
-                }
-                is Loading -> {
-                }
-                else -> {
-
-                }
-            }
-        }
+        pictureViewModel.onAsync(PictureState::request, uniqueOnly(),
+            onFail = {
+                refreshLayout.isRefreshing = false
+                Snackbar.make(
+                    recyclerView,
+                    "image request failed! msg=$it.message",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            },
+            onSuccess = {
+                refreshLayout.isRefreshing = false
+            })
         refreshLayout.setOnRefreshListener(pictureViewModel::reloadData)
     }
 

@@ -5,12 +5,9 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import coil.load
-import coil.transform.CircleCropTransformation
 import com.airbnb.epoxy.CallbackProp
 import com.airbnb.epoxy.ModelProp
 import com.airbnb.epoxy.ModelView
-import com.bumptech.glide.Glide
-import com.squareup.picasso.Picasso
 import com.yrickwong.tech.pictureapp.bean.Picture
 import com.yrickwong.tech.pictureapp.R
 import kotlinx.android.synthetic.main.picture_square.view.*

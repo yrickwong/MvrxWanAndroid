@@ -28,6 +28,9 @@ android {
         preDexLibraries true
         maxProcessCount 8
     }
+    viewBinding {
+        enabled = true
+    }
 }
 
 kapt {

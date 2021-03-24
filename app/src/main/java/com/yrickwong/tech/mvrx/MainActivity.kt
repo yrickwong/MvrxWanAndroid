@@ -47,11 +47,6 @@ class MainActivity : BaseMvRxActivity() {
         }
         initDrawerLayout()
         nav_view.run {
-            setNavigationItemSelectedListener { item ->
-                when (item.itemId) {
-
-                }
-            }
             nav_username = getHeaderView(0).findViewById(R.id.tv_username)
             setOnClickListener {
                 Intent(this@MainActivity, LoginActivity::class.java).run {

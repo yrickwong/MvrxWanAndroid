@@ -2,6 +2,7 @@ package com.yrickwong.tech.pictureapp
 
 import android.app.Application
 import android.content.Context
+import com.airbnb.mvrx.Mavericks
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.OkHttpClient
@@ -25,6 +26,7 @@ class PictureApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        Mavericks.initialize(this)
         startKoin {
             androidContext(androidContext = this@PictureApplication)
             modules(API_SERVICE_MODULE)

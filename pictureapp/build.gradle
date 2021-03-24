@@ -1,9 +1,6 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
-
 apply plugin: 'kotlin-kapt'  //kotlin的apt
 android {
     compileSdkVersion 29
@@ -33,56 +30,44 @@ android {
         }
     }
 
+    viewBinding {
+        enabled = true
+    }
 }
 
-//for epoxy
-kapt {
-    correctErrorTypes = true
-}
-androidExtensions {
-    //in gradle to enable Parcelize
-    experimental = true
-}
 
 dependencies {
-    implementation 'com.airbnb.android:mvrx:1.3.0' //mvvm arch
-    implementation "androidx.navigation:navigation-fragment-ktx:$navVersion"
-    implementation "androidx.navigation:navigation-ui-ktx:$navVersion"
-
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'androidx.core:core-ktx:1.0.2'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-
-
-    implementation("com.airbnb.android:epoxy:$epoxyVersion") {
-        exclude group: 'com.android.support'
-    }
-    implementation 'com.google.android.material:material:1.0.0'
-    implementation 'androidx.navigation:navigation-fragment:2.1.0'
-    implementation 'androidx.navigation:navigation-ui:2.1.0'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.1.0'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.1.0'
+    //kapt
     kapt "com.airbnb.android:epoxy-processor:$epoxyVersion"
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
 
+    //mvvm arch
+    implementation 'com.airbnb.android:mavericks:2.1.0'
 
+    //json serial
     implementation "com.squareup.moshi:moshi:$moshiVersion"
     implementation "com.squareup.moshi:moshi-kotlin:$moshiVersion"
-    kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
 
     //Dependency Inject
     implementation "org.koin:koin-android:$koinVersion"
 
+    //network
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-moshi:$retrofitVersion"
-
     implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
 
     //image load
-    implementation 'com.squareup.picasso:picasso:2.8'
-    implementation 'com.github.bumptech.glide:glide:4.10.0'
     implementation("io.coil-kt:coil:1.1.1")
+
+    //foundation
+    implementation "androidx.appcompat:appcompat:1.2.0"
+    implementation "androidx.constraintlayout:constraintlayout:2.0.4"
+    implementation "androidx.lifecycle:lifecycle-common-java8:2.3.0"
+    implementation 'androidx.core:core-ktx:1.3.2'
+    implementation("com.airbnb.android:epoxy:$epoxyVersion") {exclude group: 'com.android.support'}
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.4'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.4'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 }

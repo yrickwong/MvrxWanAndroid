@@ -7,8 +7,6 @@ import com.yrickwong.tech.pictureapp.ApiService
 import com.yrickwong.tech.pictureapp.PICTURE_PER_PAGE
 import com.yrickwong.tech.pictureapp.bean.HttpResult
 import com.yrickwong.tech.pictureapp.bean.Picture
-import com.yrickwong.tech.pictureapp.core.MvRxViewModel
-import io.reactivex.schedulers.Schedulers
 import org.koin.android.ext.android.inject
 
 private const val TAG = "wangyi"
@@ -18,10 +16,10 @@ data class PictureState(
     val place: String? = null,
     val pictures: List<Picture> = emptyList(),
     val request: Async<HttpResult<List<Picture>>> = Uninitialized
-) : MvRxState
+) : MavericksState
 
 class PictureViewModel(pictureState: PictureState, private val apiService: ApiService) :
-    MvRxViewModel<PictureState>(pictureState) {
+    MavericksViewModel<PictureState>(pictureState) {
 
     init {
         fetchData(DEFAULT_PLACE)
@@ -30,16 +28,16 @@ class PictureViewModel(pictureState: PictureState, private val apiService: ApiSe
     fun reloadData() {
         withState { state ->
             Log.d(TAG, "reloadData: place=${state.place}")
-            if (state.request is Loading||TextUtils.isEmpty(state.place)) return@withState //避免重复请求
+            if (state.request is Loading || TextUtils.isEmpty(state.place)) return@withState //避免重复请求
 
-            apiService
-                .search(
-                    query = state.place!!,
-                    page = 1,
-                    limit = PICTURE_PER_PAGE
-                )
-                .subscribeOn(Schedulers.io())
-                .execute {
+            suspend {
+                apiService
+                    .search(
+                        query = state.place!!,
+                        page = 1,
+                        limit = PICTURE_PER_PAGE
+                    )
+            }.execute {
                     copy(
                         request = it,
                         place = place,
@@ -54,14 +52,14 @@ class PictureViewModel(pictureState: PictureState, private val apiService: ApiSe
         withState { state ->
             if (state.request is Loading) return@withState //避免重复请求
 
-            apiService
-                .search(
-                    query = place,
-                    page = 1,
-                    limit = PICTURE_PER_PAGE
-                )
-                .subscribeOn(Schedulers.io())
-                .execute {
+            suspend {
+                apiService
+                    .search(
+                        query = place,
+                        page = 1,
+                        limit = PICTURE_PER_PAGE
+                    )
+            }.execute {
                     copy(
                         request = it,
                         place = place,
@@ -79,14 +77,14 @@ class PictureViewModel(pictureState: PictureState, private val apiService: ApiSe
         withState { state ->
             if (state.request is Loading) return@withState //避免重复请求
 
-            apiService
-                .search(
-                    query = state.place ?: "",
-                    page = state.pictures.size / PICTURE_PER_PAGE + 1,
-                    limit = PICTURE_PER_PAGE
-                )
-                .subscribeOn(Schedulers.io())
-                .execute {
+            suspend {
+                apiService
+                    .search(
+                        query = state.place ?: "",
+                        page = state.pictures.size / PICTURE_PER_PAGE + 1,
+                        limit = PICTURE_PER_PAGE
+                    )
+            }.execute {
                     copy(
                         request = it,
                         place = place,
@@ -97,7 +95,7 @@ class PictureViewModel(pictureState: PictureState, private val apiService: ApiSe
     }
 
 
-    companion object : MvRxViewModelFactory<PictureViewModel, PictureState> {
+    companion object : MavericksViewModelFactory<PictureViewModel, PictureState> {
 
         override fun create(
             viewModelContext: ViewModelContext,
